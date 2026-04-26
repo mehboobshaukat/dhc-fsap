@@ -44,21 +44,6 @@ builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalWP",
-        builder =>
-        {
-            builder.WithOrigins(
-                "http://localhost:5285",
-                "http://localhost:5173"
-                )
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-        });
-});
-
-builder.Services.AddCors(options =>
-{
     options.AddPolicy("AllowAll",
         policy => policy
         .AllowAnyOrigin()
@@ -89,24 +74,19 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 
-
+app.UseStaticFiles();
+app.useRouting();
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseStaticFiles();
-
-app.UseCors("AllowLocalWP");
-app.UseCors("AllowAll");
-
-//app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
 app.MapControllers();
+
+var port = Environment.GetEnvironmentVariable("PORT")?? "8080";
+app.Urls.Add($"http://0.0.0.0:{port}");
 
 app.Run();
