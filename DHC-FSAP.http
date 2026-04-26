@@ -1,0 +1,6 @@
+@DHC_FSAP_HostAddress = http://localhost:5285
+
+GET {{DHC_FSAP_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
