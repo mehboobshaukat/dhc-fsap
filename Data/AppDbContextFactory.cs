@@ -15,7 +15,10 @@ namespace DHC_FSAP.Data
 
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
             var connectingString = config.GetConnectionString("DefaultConnection");
-            optionsBuilder.UseSqlServer(connectingString);
+            // optionsBuilder.UseSqlServer(connectingString);
+            optionsBuilder.UseMySql(
+                connectingString, ServerVersion.AutoDetect(connectingString)
+            );
 
             return new AppDbContext(optionsBuilder.Options);
         }
